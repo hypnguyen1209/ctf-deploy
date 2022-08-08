@@ -1,0 +1,32 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    ports:
+      - "9004:80"
+    volumes:
+      - ./src:/var/www/html:ro
+    depends_on:
+      - db
+    restart: on-failure
+    networks:
+      default:
+      internal:
+  db:
+    image: mysql:latest
+    restart: on-failure
+    environment:
+      MYSQL_DATABASE: db
+      MYSQL_USER: user
+      MYSQL_PASSWORD: passwd
+      MYSQL_ROOT_PASSWORD: r00tP4sswD
+    volumes:
+      - ./databases:/docker-entrypoint-initdb.d
+    networks:
+      internal:
+
+networks:
+  default:
+  internal:
+    internal: true
